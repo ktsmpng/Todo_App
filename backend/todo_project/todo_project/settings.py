@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     #3rd Party
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
 
     #Local
     'todos.apps.TodosConfig',
