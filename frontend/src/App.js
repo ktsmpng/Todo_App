@@ -38,13 +38,29 @@ class App extends Component {
             <h1 className="h1">Todo App</h1>
         </div>
         <TodoForm title={this.state.title} body={this.state.body} onChange={this.onChange} getTodos={this.getTodos}/>
-        <TodoList todos={this.state.todos} />
+        <TodoList todos={this.state.todos} getTodos={this.getTodos}/>
       </div>
     );
   }
 }
 
 class TodoList extends React.Component{
+  deleteTodo = (e) =>{
+    let address = 'http://127.0.0.1:8000/api/' + e.target.value + "/";
+    alert(address);
+    axios
+      .delete(address, {
+          id: e.target.value,
+      })
+      .then(res => {
+        this.props.getTodos();
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   render(){
     return(
         <div>
@@ -54,6 +70,7 @@ class TodoList extends React.Component{
               <h5>{item.title}</h5>
               <p>{item.body}</p>
               </div>
+              <button onClick={this.deleteTodo} value={item.id}>Delete</button>
             </div>
           ))}
         </div>
