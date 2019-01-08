@@ -33,19 +33,32 @@ class App extends Component {
 
   render(){
     return (
-      <div className="App">
-        <h1>Todo App</h1>
+      <div className="App container container-fluid jumbotron">
+        <div className="">
+            <h1 className="h1">Todo App</h1>
+        </div>
         <TodoForm title={this.state.title} body={this.state.body} onChange={this.onChange} getTodos={this.getTodos}/>
-        {this.state.todos.map(item => (
-          <div key={item.id}>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-          </div>
-          ))}
+        <TodoList todos={this.state.todos} />
       </div>
     );
   }
+}
 
+class TodoList extends React.Component{
+  render(){
+    return(
+        <div>
+          {this.props.todos.map(item => (
+            <div className="card bg-light text-dark" key={item.id}>
+              <div className="card-body"> 
+              <h5>{item.title}</h5>
+              <p>{item.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+  }
 }
 
 class TodoForm extends App{
@@ -69,11 +82,19 @@ class TodoForm extends App{
 
   render(){
     return(
-      <form onSubmit={this.postTodo}>
-          <input type="text" name="title" placeholder="Title" onChange={this.props.onChange}/>
-          <input type="text" name="body" placeholder="Description" onChange={this.props.onChange}/>
-          <input type="submit" value="submit" />
-      </form>
+      <div className="form-group row">
+        <form onSubmit={this.postTodo} className="row">
+          <div className="col-md-4">
+            <input type="text" name="title" placeholder="Title" onChange={this.props.onChange}/>
+          </div>
+          <div className="col-md-4">
+            <input type="text" name="body" placeholder="Description" onChange={this.props.onChange}/>
+          </div>
+          <div className="col-md-4">
+            <input type="submit" value="submit" />
+          </div>
+        </form>
+      </div>
     );
   }
 }
