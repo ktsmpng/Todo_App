@@ -12,3 +12,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+
+.App-container{
+	display: flex;
+	height: -webkit-fill-available;
+}
+
+.App-container--inner{
+	padding: 50px 30px;
+	height: -webkit-fill-available;
+}
+
+.Todo-cards{
+	margin-bottom: 15px;
+}
+
+.Todo-cards--checkbox-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.Todo-cards--checkbox{
+	height: 20px;
+	width:20px;
+	margin-left: 5px;
+}
+
+.form-group{
+	display: flex;
+	align-items: center;
+	margin-top: 20px;
+}
