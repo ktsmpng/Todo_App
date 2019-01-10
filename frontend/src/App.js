@@ -141,7 +141,7 @@ class TodoList extends React.Component{
   }
 }
 
-class TodoForm extends App{
+class TodoForm extends React.Component{
 
   postTodo = (e) => {
     e.preventDefault();
@@ -151,6 +151,7 @@ class TodoForm extends App{
           body: this.props.body
       })
       .then(res => {
+        this.clearForm();
         this.props.getTodos();
         console.log(res);
       })
@@ -159,15 +160,22 @@ class TodoForm extends App{
       })
   }
 
+  clearForm = () =>{
+    document.getElementById('formTitle').value = '';
+    document.getElementById('formBody').value = '';
+  }
+
+  
+
   render(){
     return(
       <div className="form-group">
         <form onSubmit={this.postTodo} className="row">
           <div className="col-md-5">
-            <input className="form-control form-control-lg" type="text" name="title" placeholder="Title" onChange={this.props.onChange}/>
+            <input id="formTitle" className="form-control form-control-lg" type="text" name="title" placeholder="Title" onChange={this.props.onChange}/>
           </div>
           <div className="col-md-5">
-            <input className="form-control form-control-lg" type="text" name="body" placeholder="Description" onChange={this.props.onChange}/>
+            <input id="formBody" className="form-control form-control-lg" type="text" name="body" placeholder="Description" onChange={this.props.onChange}/>
           </div>
           <div className="col-md-2">
             <input className="btn btn-dark btn-lg" type="submit" value="Add Task" />
