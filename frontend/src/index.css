@@ -40,6 +40,17 @@ code {
 	margin-left: 5px;
 }
 
+.Todo-cards-complete{
+	flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.Todo-cards-complete i{
+	font-size: 250px;
+}
+
 .form-group{
 	display: flex;
 	align-items: center;

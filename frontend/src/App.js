@@ -128,9 +128,9 @@ class TodoList extends React.Component{
                       </div>
                     ));
 
-    const noTodo = <div className="row container">
-                      <h5>No tasks today </h5>
-                      <i class="material-icons">check_circle_outline</i>
+    const noTodo = <div className="row container Todo-cards-complete">
+                      <h4>All tasks completed today!</h4>
+                      <i className="material-icons">check_circle_outline</i>
                     </div>;
     return(
         <div>
