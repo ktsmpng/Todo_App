@@ -45,3 +45,27 @@ code {
 	align-items: center;
 	margin-top: 20px;
 }
+
+.Sidebar-menu--item{
+	display: flex;
+}
+
+.Sidebar-menu--item:hover{
+	background-color: white;
+}
+
+.Sidebar-menu--item i{
+	font-size: 30px;
+	margin-right: 15px;
+	margin-bottom: 5px;
+}
+
+.Sidebar-menu--item a{
+	color:black;
+}
+
+.Sidebar-menu--itemInner{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

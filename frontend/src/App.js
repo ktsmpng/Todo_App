@@ -35,29 +35,20 @@ class App extends Component {
   
 
   render(){
+    let date = this.state.todaysDate.toUTCString();
     return (
       <div className="bg-light">
         <Navbar />
         <div className="App container">
           <div className="row">
             <div className="col-md-4 bg-light App-container--inner">
-              <navbar>
-                <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <h5><a className="nav-link text-black" href="#">Today</a></h5>
-                  </li>
-                  <li class="nav-item">
-                    <h5><a className="nav-link" href="#">This Week</a></h5>
-                  </li>
-                </ul>
-              </navbar>
+              <Sidebar />
             </div>
             <div className="col-md-8 bg-white App-container--inner">
               <span>
                 <h1 className="h1">Today</h1>
-                <p>{this.state.todaysDate.toUTCString()}</p>
+                <p>{date.slice(0,date.length - 12)}</p>
               </span>
-              
               <TodoForm title={this.state.title} body={this.state.body} onChange={this.onChange} getTodos={this.getTodos}/>
               <TodoList todos={this.state.todos} getTodos={this.getTodos}/>
             </div>
@@ -65,6 +56,27 @@ class App extends Component {
         </div>
       </div>
     );
+  }
+}
+
+class Sidebar extends React.Component{
+  render(){
+    return(
+      <div>
+        <navbar>
+          <ul class="navbar-nav">
+            <li className="nav-item Sidebar-menu--item">
+              <i className="material-icons Sidebar-menu--itemInner">calendar_today</i>
+              <h5><a className="nav-link Sidebar-menu--itemInner" href="">Today</a></h5>
+            </li>
+            <li className="nav-item Sidebar-menu--item">
+              <i className="material-icons Sidebar-menu--itemInner">date_range</i>
+              <h5><a className="nav-link Sidebar-menu--itemInner" href="#">This Week</a></h5>
+            </li>
+          </ul>
+        </navbar>
+      </div>
+      );
   }
 }
 
@@ -102,21 +114,28 @@ class TodoList extends React.Component{
   }
 
   render(){
+    const hasTodo = this.props.todos.map(item => (
+                      <div className="card bg-outline-info text-dark Todo-cards" key={item.id}>
+                        <div className="row">
+                          <div className="Todo-cards--checkbox-container col-md-1">
+                            <input className="Todo-cards--checkbox" type="checkbox" onClick={this.deleteTodo} value={item.id}/>
+                          </div>
+                          <div className="col-md-11 card-body"> 
+                            <h5>{item.title}</h5>
+                            <p>{item.body}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ));
+
+    const noTodo = <div className="row container">
+                      <h5>No tasks today </h5>
+                      <i class="material-icons">check_circle_outline</i>
+                    </div>;
     return(
         <div>
-          {this.props.todos.map(item => (
-            <div className="card bg-outline-info text-dark Todo-cards" key={item.id}>
-              <div className="row">
-                <div className="Todo-cards--checkbox-container col-md-1">
-                  <input className="Todo-cards--checkbox" type="checkbox" onClick={this.deleteTodo} value={item.id}/>
-                </div>
-                <div className="col-md-11 card-body"> 
-                  <h5>{item.title}</h5>
-                  <p>{item.body}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+          {this.props.todos.length > 0 ?
+            hasTodo : noTodo}
         </div>
       );
   }
