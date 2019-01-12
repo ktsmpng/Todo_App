@@ -9,7 +9,7 @@ class App extends Component {
       todos:[],
       title: '',
       body: '',
-      todaysDate: new Date()
+      week: false
     };
   }
 
@@ -35,7 +35,6 @@ class App extends Component {
   
 
   render(){
-    let date = this.state.todaysDate.toUTCString();
     return (
       <div className="bg-light">
         <Navbar />
@@ -45,17 +44,43 @@ class App extends Component {
               <Sidebar />
             </div>
             <div className="col-md-8 bg-white App-container--inner">
-              <span>
-                <h1 className="h1">Today</h1>
-                <p>{date.slice(0,date.length - 12)}</p>
-              </span>
-              <TodoForm title={this.state.title} body={this.state.body} onChange={this.onChange} getTodos={this.getTodos}/>
-              <TodoList todos={this.state.todos} getTodos={this.getTodos}/>
+              <TodoAppComponent title={this.state.title} body={this.state.body} onChange={this.onChange} getTodos={this.getTodos} todos={this.state.todos}/>
             </div>
           </div>
         </div>
       </div>
     );
+  }
+}
+
+class TodoAppComponent extends React.Component{
+  render(){
+    return(
+        <div>
+          <TodoTitle />
+          <TodoForm title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos}/>
+          <TodoList todos={this.props.todos} getTodos={this.props.getTodos}/>
+        </div>
+      );
+  }
+}
+
+class TodoTitle extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      day: 'Today',
+      todaysDate: new Date()
+    }
+  }
+  render(){
+    let date = this.state.todaysDate.toUTCString();
+    return(
+      <div>
+        <h1 className="h1">{this.state.day}</h1>
+        <p>{date.slice(0,date.length - 12)}</p>
+      </div>
+      );
   }
 }
 
@@ -134,8 +159,7 @@ class TodoList extends React.Component{
                     </div>;
     return(
         <div>
-          {this.props.todos.length > 0 ?
-            hasTodo : noTodo}
+          {this.props.todos.length > 0 ? hasTodo : noTodo}
         </div>
       );
   }
