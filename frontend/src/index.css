@@ -61,7 +61,7 @@ code {
 	display: flex;
 }
 
-.Sidebar-menu--item:hover{
+.Sidebar-menu--item:active{
 	background-color: white;
 }
 
@@ -71,8 +71,14 @@ code {
 	margin-bottom: 5px;
 }
 
+.Sidebar-menu--item button{
+	background: transparent;
+	border: none;
+}
+
 .Sidebar-menu--itemInner{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
+

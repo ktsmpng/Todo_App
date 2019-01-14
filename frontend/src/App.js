@@ -17,7 +17,6 @@ class App extends Component {
   }
 
   changeWeek = (e)=>{
-    alert(e.target.value);
     e.target.value == "today" ? this.setState({week:false}): this.setState({week: true});
   }
 

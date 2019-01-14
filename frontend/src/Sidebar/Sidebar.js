@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 
 export default class Sidebar extends React.Component{
-
   render(){
     return(
       <div>
         <navbar>
           <ul class="navbar-nav">
-            <li className="nav-item Sidebar-menu--item">
+            <li className="Sidebar-menu--item active">
               <i className="material-icons Sidebar-menu--itemInner">calendar_today</i>
-              <button className="nav-link Sidebar-menu--itemInner" value="today" onClick={this.props.changeWeek}>Today</button>
+              <button className="nav-link Sidebar-menu--itemInner h5" value="today" onClick={this.props.changeWeek}>Today</button>
             </li>
             <li className="nav-item Sidebar-menu--item">
               <i className="material-icons Sidebar-menu--itemInner">date_range</i>
-              <button className="nav-link Sidebar-menu--itemInner" value="week" onClick={this.props.changeWeek}>This Week</button>
+              <button className="nav-link Sidebar-menu--itemInner h5" value="week" onClick={this.props.changeWeek}>This Week</button>
             </li>
           </ul>
         </navbar>

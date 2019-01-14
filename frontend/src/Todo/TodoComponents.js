@@ -5,20 +5,47 @@ export default class TodoAppComponentListContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      week: this.props.week
+      daysofweek: [{day:"Monday", date:'a'}, 
+      {day:"Tuesday",date:''}, {day:"Wednesday",date:''}, {day:"Thursday",date:''}, {day:"Friday",date:''}, {day:"Saturday",date:''}, {day:"Sunday",date:''}],
+      todaysDate: new Date()
+    }
+  }
+
+  componentDidMount(){
+    if(this.state.todaysDate.getUTCDay() != 1){
+      this.orderDaysOfWeek();
     };
+    this.mapDates();
+  }
+
+  orderDaysOfWeek = () =>{
+    const orderedWeekOne = this.state.daysofweek.slice(this.state.todaysDate.getUTCDay() - 1, this.state.daysofweek.length);
+    const orderedWeekTwo = this.state.daysofweek.slice(0, this.state.todaysDate.getUTCDay());
+    this.setState({daysofweek: orderedWeekOne.concat(orderedWeekTwo)});
+  }
+
+  mapDates = () =>{
+    const d = [...this.state.daysofweek];
+    let count = 0;
+    const newd = d.map((i)=>{
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDay() + count); 
+      count+=1;
+      return {day:i.day, date: tomorrow.toUTCString().slice(0,today.toUTCString().length - 12)};
+    });
+    this.setState({daysofweek: newd});
   }
 
   renderNumberOfDaysTodos = ()=>{
-    const daysofweek = ["Monday", "Tuesday", "Wednesday", "Thursdaay", "Friday", "Saturday", "Sunday"];
     if(this.props.week == false){
       return <TodoAppComponent week={this.props.week} day={"Today"} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
     }else{
-      return(daysofweek.map((day)=>{
-        return (<TodoAppComponent week={this.props.week} day={day} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>);
+      return(this.state.daysofweek.map((d)=>{
+        return (<TodoAppComponent week={this.props.week} date={d.date} day={d.day} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>);
       }));
     }
-  }
+    }
   render(){
     return(
       <div>{this.renderNumberOfDaysTodos()}</div>
@@ -31,7 +58,7 @@ class TodoAppComponent extends React.Component{
   render(){
     return(
         <div>
-          <TodoTitle day={this.props.day} />
+          <TodoTitle day={this.props.day} date={this.props.date}/>
           <TodoForm title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} week={this.props.week}/>
           <TodoList todos={this.props.todos} getTodos={this.props.getTodos}/>
         </div>
@@ -42,21 +69,18 @@ class TodoAppComponent extends React.Component{
 class TodoTitle extends React.Component{
   constructor(props){
     super(props);
-    this.state = {
-      day: 'Today',
-      todaysDate: new Date()
-    }
   }
   render(){
-    let date = this.state.todaysDate.toUTCString();
+
     return(
       <div>
-        <h1 className="h1">{this.state.day}</h1>
-        <p>{date.slice(0,date.length - 12)}</p>
+        <h1 className="h1">{this.props.day}</h1>
+        {this.props.date}
       </div>
       );
   }
 }
+
 class TodoList extends React.Component{
   constructor(props){
     super(props);
@@ -64,6 +88,7 @@ class TodoList extends React.Component{
       noTodo: '',
     }
   }
+
   deleteTodo = (e) =>{
     let address = 'http://127.0.0.1:8000/api/' + e.target.value + "/";
     axios
