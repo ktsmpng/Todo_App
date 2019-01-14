@@ -71,10 +71,6 @@ code {
 	margin-bottom: 5px;
 }
 
-.Sidebar-menu--item a{
-	color:black;
-}
-
 .Sidebar-menu--itemInner{
 	display: flex;
 	justify-content: center;
