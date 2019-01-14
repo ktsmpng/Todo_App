@@ -13,6 +13,11 @@ class App extends Component {
     };
   }
 
+  changeWeek = (e)=>{
+    alert(e.target.value);
+    e.target.value == "today" ? this.setState({week:false}): this.setState({week: true});
+  }
+
   componentDidMount(){
     this.getTodos();
   }
@@ -41,10 +46,10 @@ class App extends Component {
         <div className="App container">
           <div className="row">
             <div className="col-md-4 bg-light App-container--inner">
-              <Sidebar />
+              <Sidebar week={this.state.week} changeWeek={this.changeWeek}/>
             </div>
             <div className="col-md-8 bg-white App-container--inner">
-              <TodoAppComponent title={this.state.title} body={this.state.body} onChange={this.onChange} getTodos={this.getTodos} todos={this.state.todos}/>
+              <TodoAppComponentListContainer week={this.state.week} todos={this.state.todos} title={this.state.title} body={this.state.body}/>
             </div>
           </div>
         </div>
@@ -53,11 +58,40 @@ class App extends Component {
   }
 }
 
+class TodoAppComponentListContainer extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      week: this.props.week
+    };
+  }
+
+  renderNumberOfDaysTodos = ()=>{
+    const daysofweek = ["Monday", "Tuesday", "Wednesday", "Thursdaay", "Friday", "Saturday", "Sunday"];
+    if(this.props.week == true){
+      return <TodoAppComponent day={"Today"} title={this.props.title} body={this.props.body} onChange={this.onChange} getTodos={this.getTodos} todos={this.props.todos}/>
+    }else{
+      return(daysofweek.map((day)=>{
+        return (<TodoAppComponent day={day} title={this.props.title} body={this.props.body} onChange={this.onChange} getTodos={this.getTodos} todos={this.props.todos}/>);
+      }));
+    }
+  }
+  render(){
+    return(
+      <div>{this.renderNumberOfDaysTodos()}</div>
+      );
+  }
+
+  
+  
+}
+
 class TodoAppComponent extends React.Component{
+
   render(){
     return(
         <div>
-          <TodoTitle />
+          <TodoTitle day={this.props.day} />
           <TodoForm title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos}/>
           <TodoList todos={this.props.todos} getTodos={this.props.getTodos}/>
         </div>
@@ -69,7 +103,7 @@ class TodoTitle extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      day: 'Today',
+      day: this.props.day,
       todaysDate: new Date()
     }
   }
@@ -85,6 +119,9 @@ class TodoTitle extends React.Component{
 }
 
 class Sidebar extends React.Component{
+  constructor(props){
+    super(props);
+  }
   render(){
     return(
       <div>
@@ -92,11 +129,11 @@ class Sidebar extends React.Component{
           <ul class="navbar-nav">
             <li className="nav-item Sidebar-menu--item">
               <i className="material-icons Sidebar-menu--itemInner">calendar_today</i>
-              <h5><a className="nav-link Sidebar-menu--itemInner" href="">Today</a></h5>
+              <h5><button className="nav-link Sidebar-menu--itemInner" value="today" onClick={this.props.changeWeek}>Today</button></h5>
             </li>
             <li className="nav-item Sidebar-menu--item">
               <i className="material-icons Sidebar-menu--itemInner">date_range</i>
-              <h5><a className="nav-link Sidebar-menu--itemInner" href="#">This Week</a></h5>
+              <h5><button className="nav-link Sidebar-menu--itemInner" value="week" onClick={this.props.changeWeek}>This Week</button></h5>
             </li>
           </ul>
         </navbar>
