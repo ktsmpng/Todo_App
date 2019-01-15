@@ -5,8 +5,15 @@ export default class TodoAppComponentListContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      daysofweek: [{day:"Monday", date:''}, 
-      {day:"Tuesday",date:''}, {day:"Wednesday",date:''}, {day:"Thursday",date:''}, {day:"Friday",date:''}, {day:"Saturday",date:''}, {day:"Sunday",date:''}],
+      daysofweek: [
+                    {day:"Monday", date:''}, 
+                    {day:"Tuesday",date:''}, 
+                    {day:"Wednesday",date:''}, 
+                    {day:"Thursday",date:''}, 
+                    {day:"Friday",date:''}, 
+                    {day:"Saturday",date:''}, 
+                    {day:"Sunday",date:''}
+                  ],
       todaysDate: new Date()
     }
   }
@@ -40,7 +47,7 @@ export default class TodoAppComponentListContainer extends React.Component{
 
   renderNumberOfDaysTodos = ()=>{
     if(this.props.week == false){
-      return <TodoAppComponent week={this.props.week} date={this.state.daysofweek[0].date} day={"Today"} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
+      return <TodoAppComponent week={this.props.week} date={this.state.daysofweek[0].date} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
     }else{
       return(this.state.daysofweek.map((d)=>{
         return (<TodoAppComponent week={this.props.week} date={d.date} day={d.day} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>);
@@ -49,7 +56,11 @@ export default class TodoAppComponentListContainer extends React.Component{
     }
   render(){
     return(
-      <div>{this.renderNumberOfDaysTodos()}</div>
+
+      <div>
+        {this.props.week == true ? <h1>Next 7 Days</h1>: <h1>Today</h1>}
+        {this.renderNumberOfDaysTodos()}
+      </div>
       );
   }
 
@@ -76,7 +87,7 @@ class TodoTitle extends React.Component{
   render(){
     return(
       <div>
-        <h1 className="h1">{this.props.day}</h1>
+        <h3 className="h3">{this.props.day}</h3>
         {this.props.date}
       </div>
       );
@@ -136,6 +147,12 @@ class TodoList extends React.Component{
 }
 
 class TodoForm extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      showForm: false,
+    }
+  }
 
   postTodo = (e) => {
     e.preventDefault();
@@ -160,22 +177,28 @@ class TodoForm extends React.Component{
     document.getElementById('formBody').value = '';
   }
 
+  showForm = () =>{
+    this.state.showForm == false ? this.setState({showForm:true}): this.setState({showForm:false});
+  }
   
-
   render(){
+    const form = (<form onSubmit={this.postTodo} className="row">
+                  <div className="col-md-5">
+                    <input id="formTitle" className="form-control" type="text" name="title" placeholder="Title" onChange={this.props.onChange}/>
+                  </div>
+                  <div className="col-md-5">
+                    <input id="formBody" className="form-control" type="text" name="body" placeholder="Description" onChange={this.props.onChange}/>
+                  </div>
+                  <div className="col-md-2">
+                    <input className="btn btn-dark" type="submit" value="Add Task" />
+                  </div>
+                </form>);
+
+    const addTask = (<button className="btn bg-dark text-light" onClick={this.showForm}>Add Task</button>);
+
     return(
       <div className="form-group">
-        <form onSubmit={this.postTodo} className="row">
-          <div className="col-md-5">
-            <input id="formTitle" className="form-control form-control-lg" type="text" name="title" placeholder="Title" onChange={this.props.onChange}/>
-          </div>
-          <div className="col-md-5">
-            <input id="formBody" className="form-control form-control-lg" type="text" name="body" placeholder="Description" onChange={this.props.onChange}/>
-          </div>
-          <div className="col-md-2">
-            <input className="btn btn-dark btn-lg" type="submit" value="Add Task" />
-          </div>
-        </form>
+        {this.state.showForm == true ? form: addTask}
       </div>
     );
   }
