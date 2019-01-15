@@ -5,7 +5,7 @@ export default class TodoAppComponentListContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      daysofweek: [{day:"Monday", date:'a'}, 
+      daysofweek: [{day:"Monday", date:''}, 
       {day:"Tuesday",date:''}, {day:"Wednesday",date:''}, {day:"Thursday",date:''}, {day:"Friday",date:''}, {day:"Saturday",date:''}, {day:"Sunday",date:''}],
       todaysDate: new Date()
     }
@@ -15,17 +15,18 @@ export default class TodoAppComponentListContainer extends React.Component{
     if(this.state.todaysDate.getUTCDay() != 1){
       this.orderDaysOfWeek();
     };
-    this.mapDates();
   }
 
-  orderDaysOfWeek = () =>{
-    const orderedWeekOne = this.state.daysofweek.slice(this.state.todaysDate.getUTCDay() - 1, this.state.daysofweek.length);
-    const orderedWeekTwo = this.state.daysofweek.slice(0, this.state.todaysDate.getUTCDay());
-    this.setState({daysofweek: orderedWeekOne.concat(orderedWeekTwo)});
-  }
-
-  mapDates = () =>{
+  orderDaysOfWeek = () =>{  
     const d = [...this.state.daysofweek];
+    const orderedWeekOne = d.slice(this.state.todaysDate.getUTCDay() -1, d.length);
+    const orderedWeekTwo = d.slice(0, this.state.todaysDate.getUTCDay());
+    const final = this.mapDates(orderedWeekOne.concat(orderedWeekTwo));
+    this.setState({daysofweek: final});
+  }
+
+  mapDates = (array) =>{
+    const d = [...array];
     let count = 0;
     const newd = d.map((i)=>{
       const today = new Date();
@@ -34,12 +35,12 @@ export default class TodoAppComponentListContainer extends React.Component{
       count+=1;
       return {day:i.day, date: tomorrow.toUTCString().slice(0,today.toUTCString().length - 12)};
     });
-    this.setState({daysofweek: newd});
+    return newd;
   }
 
   renderNumberOfDaysTodos = ()=>{
     if(this.props.week == false){
-      return <TodoAppComponent week={this.props.week} day={"Today"} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
+      return <TodoAppComponent week={this.props.week} date={this.state.daysofweek[0].date} day={"Today"} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
     }else{
       return(this.state.daysofweek.map((d)=>{
         return (<TodoAppComponent week={this.props.week} date={d.date} day={d.day} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>);
@@ -59,7 +60,7 @@ class TodoAppComponent extends React.Component{
     return(
         <div>
           <TodoTitle day={this.props.day} date={this.props.date}/>
-          <TodoForm title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} week={this.props.week}/>
+          <TodoForm title={this.props.title} date={this.props.date} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} week={this.props.week}/>
           <TodoList todos={this.props.todos} getTodos={this.props.getTodos} week={this.props.week}/>
           <hr></hr>
         </div>
@@ -71,8 +72,8 @@ class TodoTitle extends React.Component{
   constructor(props){
     super(props);
   }
-  render(){
 
+  render(){
     return(
       <div>
         <h1 className="h1">{this.props.day}</h1>
@@ -141,7 +142,8 @@ class TodoForm extends React.Component{
     axios
       .post('http://127.0.0.1:8000/api/', {
           title: this.props.title,
-          body: this.props.body
+          body: this.props.body,
+          date_created: this.props.date
       })
       .then(res => {
         this.clearForm();
