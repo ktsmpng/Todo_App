@@ -30,7 +30,7 @@ export default class TodoAppComponentListContainer extends React.Component{
     const newd = d.map((i)=>{
       const today = new Date();
       const tomorrow = new Date();
-      tomorrow.setDate(today.getDay() + count); 
+      tomorrow.setDate(today.getDate() + count); 
       count+=1;
       return {day:i.day, date: tomorrow.toUTCString().slice(0,today.toUTCString().length - 12)};
     });
@@ -60,7 +60,8 @@ class TodoAppComponent extends React.Component{
         <div>
           <TodoTitle day={this.props.day} date={this.props.date}/>
           <TodoForm title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} week={this.props.week}/>
-          <TodoList todos={this.props.todos} getTodos={this.props.getTodos}/>
+          <TodoList todos={this.props.todos} getTodos={this.props.getTodos} week={this.props.week}/>
+          <hr></hr>
         </div>
       );
   }
@@ -106,7 +107,7 @@ class TodoList extends React.Component{
   }
 
   componentDidMount(){
-    this.props.week == false ? this.setState({noTodo: <div><h5>This should be false</h5></div>}): this.setState({noTodo: <div><h5>No Tasks Today</h5></div>});
+    this.props.week == false ? this.setState({noTodo: <div className="Todo-cards-complete"><h5>All tasks are complete!</h5><i className="material-icons">check_circle_outline</i></div>}): this.setState({noTodo: <div><h5>No Tasks Today</h5></div>});
   }
 
   render(){
@@ -121,7 +122,7 @@ class TodoList extends React.Component{
                             <p>{item.body}</p>
                           </div>
                         </div>
-                      </div>
+                      </div>                      
                     ));
 
     
