@@ -40,7 +40,6 @@ export default class TodoAppComponentListContainer extends React.Component{
       const tomorrow = new Date();
       tomorrow.setDate(today.getDate() + count); 
       count+=1;
-      alert(tomorrow.toISOString().slice(0,10));
       return {day:i.day, date: tomorrow.toUTCString().slice(0,tomorrow.toUTCString().length - 12), isoDate: tomorrow.toISOString().slice(0,10)};
     });
     return newd;
@@ -48,7 +47,7 @@ export default class TodoAppComponentListContainer extends React.Component{
 
   renderNumberOfDaysTodos = ()=>{
     if(this.props.week == false){
-      return <TodoAppComponent week={this.props.week} date={this.state.daysofweek[0].date} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
+      return <TodoAppComponent week={this.props.week} isoDate={this.state.daysofweek[0].isoDate} date={this.state.daysofweek[0].date} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>
     }else{
       return(this.state.daysofweek.map((d)=>{
         return (<TodoAppComponent week={this.props.week} isoDate={d.isoDate} date={d.date} day={d.day} title={this.props.title} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} todos={this.props.todos}/>);
@@ -73,7 +72,7 @@ class TodoAppComponent extends React.Component{
         <div>
           <TodoTitle day={this.props.day} date={this.props.date} isoDate={this.props.isoDate}/>
           <TodoForm title={this.props.title} date={this.props.date} isoDate={this.props.isoDate} body={this.props.body} onChange={this.props.onChange} getTodos={this.props.getTodos} week={this.props.week}/>
-          <TodoList todos={this.props.todos} getTodos={this.props.getTodos} week={this.props.week}/>
+          <TodoList todos={this.props.todos} isoDate={this.props.isoDate} getTodos={this.props.getTodos} week={this.props.week}/>
           <hr></hr>
         </div>
       );
@@ -124,7 +123,7 @@ class TodoList extends React.Component{
   }
 
   render(){
-    const hasTodo = this.props.todos.map(item => (
+    const hasTodo = this.props.todos.filter((d)=> {return d.date_due == this.props.isoDate}).map(item => (
                       <div className="card bg-outline-info text-dark Todo-cards" key={item.id}>
                         <div className="row">
                           <div className="Todo-cards--checkbox-container col-md-1">
